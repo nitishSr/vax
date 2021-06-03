@@ -1,11 +1,14 @@
 # vax
-Covid-19 Vaccine slot availability tool
+Covid-19 Vaccine slot availability web utility built in Python and Flask.
 
-## About
+### About
 Web utility that helps user to search for vaccine slots. Currently, supports searching by area pin code.
 
-## Gettin Started
-In order to use this locally, follow the below steps -
+### Pre-requisites
+Python 3+ installed
+
+### Getting Started
+In order to use the app locally, follow the below steps -
 
 - Clone the repository 
   ```
