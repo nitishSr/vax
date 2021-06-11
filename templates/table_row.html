@@ -1,0 +1,23 @@
+<tr>
+    <td class="text-wrap text-justify" style="width: 22rem;">
+        <div class="card">
+            <div class="card-body">
+              <p class="card-text font-weight-bolder">{{ info['name'] }}</p>
+              <p class="card-text">{{ info['address'] | title }}</p>
+            </div>
+        </div>
+    </td>
+    {% if info['available_capacity_dose1'] | int > 0 %}
+        <td class="text-success text-center">{{ info['available_capacity_dose1'] }}</td>
+    {% else %}
+        <td class="text-danger text-center">{{ info['available_capacity_dose1'] }}</td>
+    {% endif %}
+    {% if info['available_capacity_dose2'] | int > 0 %}
+        <td class="text-success text-center">{{ info['available_capacity_dose2'] }}</td>
+    {% else %}
+        <td class="text-danger text-center">{{ info['available_capacity_dose2'] }}</td>
+    {% endif %}
+    <td class="text-center text-dark">{{ info['min_age_limit'] }}+</td>
+    <td class="text-center">{{ info['vaccine'] }}</td>
+    <td class="text-center">{{ info['fee'] }}</td>
+</tr>

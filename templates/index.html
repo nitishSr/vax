@@ -1,121 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- Required meta tags -->
+
+<head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <title>Vax | Your Vaccine Appointment Buddy</title>
-    </head>
-    <body>
-       <nav class="navbar navbar-dark bg-dark">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Vax | Your Vaccine Appointment Buddy</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
         <a class="navbar-brand" href="{{ url_for('index')}}">Vax</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
     </nav>
     <br>
 
     <div class="container">
-        <div class="row row-cols-3">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-8">
-                
-                <h2 class="text-dark font-weight-bolder">Get your vaccine slot availability in a click ! </h2>
-                
-            </div>
-            <div class="col-sm-2"></div>
+        <div class="header-card">
+            <h4>Get Vaccinated !</h4>
+            <hr class="my-3">
+            <p class="font-italic">Enter your area pincode to see availability of vaccines near by.</p>
         </div>
     </div>
-
+    </div>
+    <br /> <br />
     <div class="container">
-        <div class="row row-cols-3">
-            <div class="col"></div>
-            <div class="col">
-                <br>
-                <form method="post" action="/">
-                    <div class="form-group">
-                        <label for="pincode">Area Pincode *</label>
-                        <input type="text" name="pincode"
-                               placeholder="Area Pincode" class="form-control"
-                               value="{{ request.form['pincode'] }}" required></input>
-                    </div>
-                
-                    <div class="form-group">
-                        <label for="date">Date</label>
-                        <input type="text" name="date" 
-                                placeholder="Date [dd-mm-yyyy]" class="form-control"
-                                value="{{request.form['date'] }}"></input>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-secondary btn-lg btn-block">Submit</button>
-                    </div>
-                </form>
-                <br>
-                    {% for error in errors %}
-                        <h4>{{ error }}</h4>
-                    {% endfor %}
-                    {% for message in get_flashed_messages() %}
-                        <div class="alert alert-danger">{{ message }}</div>
-                    {% endfor %}
-                <br>
+        <form class="form-inline" method="post" action="/">
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="pincode" class="sr-only">Enter your Area Pincode</label>
+                <input type="text" name="pincode" placeholder="Enter your Area Pincode" class="form-control form-control-lg"
+                    value="{{ request.form['pincode'] }}" required></input>
             </div>
-            <div class="col"></div>
-        </div>
-    </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <button type="submit" class="btn btn-dark">Search slots</button>
+            </div>
+        </form>
+        {% if errors %}
+        <br />
+        <h4 class="alert alert-danger">{{ error }}</h4>
+        {% endif %}
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-danger">{{ message }}</div>
+        <br />
+        {% endfor %}
 
-    <br>
+    </div>
     {% if data %}
+    <br /> <br /> 
     <div class="container">
-        {% block content %}
-            <h4 class="font-italic">Vaccine slot availability for {{ data[0]['date'] }} - </h4>
-            <br>
-            <table class="table">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col">Center Name</th>
-                    <th scope="col">Dose 1</th>
-                    <th scope="col">Dose 2</th>
-                    <th scope="col">Age Limit</th>
-                    <th scope="col">Vaccine</th>
-                    <th scope="col">Fee</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    {% for info in data %}
-                    <tr>
-                        <td class="text-wrap text-justify" style="width: 22rem;">{{ info['name'] | title }} 
-                            <br><br> <b>Adress -</b>
-                            {{ info['address'] | title }}
-                        </td>
-                        {% if info['available_capacity_dose1'] | int > 0 %}
-                            <td class="text-success">{{ info['available_capacity_dose1'] }}</td>
-                        {% else %}
-                            <td class="text-danger">{{ info['available_capacity_dose1'] }}</td>
-                        {% endif %}
-                        {% if info['available_capacity_dose2'] | int > 0 %}
-                            <td class="text-success">{{ info['available_capacity_dose2'] }}</td>
-                        {% else %}
-                            <td class="text-danger">{{ info['available_capacity_dose2'] }}</td>
-                        {% endif %}
-                        <td>{{ info['min_age_limit'] }}+</td>
-                        <td>{{ info['vaccine'] }}</td>
-                        <td>{{ info['fee'] }}</td>
-                      </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endblock %}
+        <p class="alert alert-warning font-italic">Displaying slots for today and tomorrow -</p>
+        <br />
+        <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="pill-today" data-toggle="pill" href="#todays-slots" role="tab"
+                    aria-controls="todays-slots" aria-selected="true"><span class="badge badge-secondary">{{ data[0][0]['date'] }}</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pill-tomorrow" data-toggle="pill" href="#tomorrows-slots" role="tab"
+                    aria-controls="tomorrows-slots" aria-selected="false"><span class="badge badge-secondary">{{ data[1][0]['date'] }}</span></a>
+            </li>
+        </ul>
+        <br />
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="todays-slots" role="tabpanel" aria-labelledby="pill-today">
+                <table class="table table-hover">
+                    {% include 'table_header.html' %}
+                    <tbody>
+                        {% for info in data[0] %}
+                        {% include 'table_row.html' %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="tomorrows-slots" role="tabpanel" aria-labelledby="pill-tomorrow">
+                <table class="table table-hover">
+                    {% include 'table_header.html' %}
+                    <tbody>
+                        {% for info in data[1] %}
+                        {% include 'table_row.html' %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     {% endif %}
 
-     <!-- Optional JavaScript -->
+    <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    </body>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
 
 </html>
